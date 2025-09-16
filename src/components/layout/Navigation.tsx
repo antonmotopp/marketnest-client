@@ -24,7 +24,7 @@ export const Navigation = () => {
   };
 
   return (
-    <div className="flex justify-between items-center py-4">
+    <div className="flex justify-between items-center py-2">
       <Link to="/" className="flex items-center">
         <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
           <span className="text-white font-bold text-sm">M</span>

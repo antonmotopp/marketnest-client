@@ -18,7 +18,6 @@ export const Login = () => {
     await requestHandler(() => authApi.login({ username, password }), {
       successMessage: `Welcome back, ${username}!`,
       onSuccess: (data) => {
-        console.log(data);
         setAuth(data.user, data.access_token);
         navigate('/');
       },
