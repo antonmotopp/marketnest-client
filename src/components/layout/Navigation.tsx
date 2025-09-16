@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/stores';
 
 export const Navigation = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuthStore();
+  const location = useLocation();
 
   const navigations = [
     { title: 'Home', link: '/' },
@@ -21,6 +22,20 @@ export const Navigation = () => {
   const handleLogout = () => {
     logout();
     setIsProfileOpen(false);
+  };
+
+  const isActiveLink = (link: string) => {
+    return location.pathname === link;
+  };
+
+  const getLinkClasses = (link: string) => {
+    const baseClasses = 'font-medium transition-colors';
+    const activeClasses = 'text-blue-600 border-b-2 border-blue-600 pb-1 hover:cursor-default';
+    const inactiveClasses = 'text-gray-700 hover:text-blue-600';
+
+    return isActiveLink(link)
+      ? `${baseClasses} ${activeClasses}`
+      : `${baseClasses} ${inactiveClasses}`;
   };
 
   return (
@@ -40,15 +55,17 @@ export const Navigation = () => {
       </div>
 
       <div className="flex gap-8 items-center">
-        {navigations.map(({ title, link }) => (
-          <Link
-            to={link}
-            key={title}
-            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-          >
-            {title}
-          </Link>
-        ))}
+        {navigations.map(({ title, link }) =>
+          isActiveLink(link) ? (
+            <span key={title} className={getLinkClasses(link)}>
+              {title}
+            </span>
+          ) : (
+            <Link to={link} key={title} className={getLinkClasses(link)}>
+              {title}
+            </Link>
+          )
+        )}
 
         {isAuthenticated ? (
           <div
