@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import {
   AdvertisementDetail,
   CreateAdvertisement,
+  EditAdvertisement,
   Home,
   Login,
   Messages,
@@ -34,6 +35,7 @@ export const AppRouter = () => {
       />
 
       <Route path="/advertisement/:id" element={<AdvertisementDetail />} />
+      <Route path="/advertisement/edit/:id" element={<EditAdvertisement />} />
 
       <Route
         path="/profile"

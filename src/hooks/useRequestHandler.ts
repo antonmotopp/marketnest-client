@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AxiosError } from 'axios';
-import { useNotifications } from '@/hooks';
+import { useNotifications } from '@/hooks/index.ts';
 
 interface RequestHandlerOptions<T> {
   disableErrorNotification?: boolean;

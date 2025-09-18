@@ -47,13 +47,6 @@ export const Navigation = () => {
         <span className="ml-2 text-xl font-bold text-gray-900">Marketplace</span>
       </Link>
 
-      <div className="flex-1 max-w-lg mx-8">
-        <input
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Search products..."
-        />
-      </div>
-
       <div className="flex gap-8 items-center">
         {navigations.map(({ title, link }) =>
           isActiveLink(link) ? (
