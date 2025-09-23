@@ -18,4 +18,5 @@ export interface IAdvertisementFilters {
   status?: string;
   search?: string;
   sort_by?: string;
+  rating_sort?: string;
 }

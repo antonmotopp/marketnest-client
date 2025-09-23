@@ -9,6 +9,7 @@ import {
   AdvertisementPhotoGallery,
   AdvertisementSellerInfo,
 } from '@/components/features/advertisements';
+import { useMutation } from '@tanstack/react-query';
 
 type Params = {
   id: string;
@@ -32,6 +33,26 @@ export const AdvertisementDetail = () => {
     error: ownerError,
   } = useUser(advertisement?.user_id);
   const { refetch: refetchAll } = useAdvertisementsAll();
+
+  const buyMutation = useMutation({
+    mutationFn: advertisementsApi.buyAdvertisement,
+    onSuccess: () => {
+      refetchOne();
+      refetchAll();
+    },
+  });
+
+  const handleBuyNow = async () => {
+    if (!advertisement) return;
+
+    const confirmed = window.confirm(
+      `Are you sure you want to buy "${advertisement.title}" for $${advertisement.price}?`
+    );
+
+    if (confirmed) {
+      buyMutation.mutate(advertisement.id);
+    }
+  };
 
   if (adLoading || ownerLoading) {
     return <div className="flex justify-center items-center min-h-64">Loading...</div>;
@@ -122,6 +143,7 @@ export const AdvertisementDetail = () => {
               isOwner={isOwner}
               advertisementStatus={advertisement.status}
               advertisementId={advertisement.id}
+              onBuyNow={handleBuyNow}
             />
           )}
 

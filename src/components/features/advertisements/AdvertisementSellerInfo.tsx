@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { formatDate } from '@/utils';
-import type { IUser } from '@/types';
-import type { IRating } from '@/types/rating';
+import type { IUser, IRating } from '@/types';
 import { ratingsApi } from '@/api';
 import { useAuthStore } from '@/stores';
-import { AdvertisementsRatingModal } from '@/components/features/advertisements/';
+import { AdvertisementsRatingModal } from '@/components/features/advertisements';
 
 interface Props {
   owner: IUser;
   isOwner: boolean;
   advertisementStatus: string;
   advertisementId: number;
+  onBuyNow: any;
 }
 
 export const AdvertisementSellerInfo = ({
@@ -19,6 +19,7 @@ export const AdvertisementSellerInfo = ({
   isOwner,
   advertisementStatus,
   advertisementId,
+  onBuyNow,
 }: Props) => {
   const currentUser = useAuthStore((state) => state.user);
   const [sellerRatings, setSellerRatings] = useState<IRating[]>([]);
@@ -86,12 +87,20 @@ export const AdvertisementSellerInfo = ({
 
           <div className="flex flex-col gap-2">
             {!isOwner && advertisementStatus === 'available' && (
-              <Link
-                to={`/messages/${owner.id}`}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-center"
-              >
-                Contact Seller
-              </Link>
+              <>
+                <button
+                  onClick={() => onBuyNow()}
+                  className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
+                >
+                  Buy Now
+                </button>
+                <Link
+                  to={`/messages/${owner.id}`}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-center"
+                >
+                  Contact Seller
+                </Link>
+              </>
             )}
 
             {canRate && (

@@ -37,6 +37,7 @@ export const advertisementsApi = {
     if (filters.status) params.append('status', filters.status);
     if (filters.search) params.append('search', filters.search);
     if (filters.sort_by) params.append('sort_by', filters.sort_by);
+    if (filters.rating_sort) params.append('rating_sort', filters.rating_sort);
 
     const response = await api.get(`/advertisements/all?${params.toString()}`);
 
@@ -48,11 +49,8 @@ export const advertisementsApi = {
     return response.data;
   },
 
-  markSold: async (id: number, buyerId: number): Promise<IAdvertisement> => {
-    const formData = new FormData();
-    formData.append('buyer_id', buyerId.toString());
-
-    const response = await api.patch(`/advertisements/${id}/mark-sold`, formData);
+  buyAdvertisement: async (id: number): Promise<IAdvertisement> => {
+    const response = await api.patch(`/advertisements/${id}/buy`);
     return response.data;
   },
 

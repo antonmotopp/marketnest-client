@@ -8,12 +8,14 @@ export const Home = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [sortBy, setSortBy] = useState('newest');
+  const [ratingSort, setRatingSort] = useState('');
 
   const handleClearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('');
     setSelectedStatus('');
     setSortBy('newest');
+    setRatingSort('');
   };
 
   const filters: IAdvertisementFilters = {
@@ -21,6 +23,7 @@ export const Home = () => {
     ...(selectedCategory && { category: selectedCategory }),
     ...(selectedStatus && { status: selectedStatus }),
     sort_by: sortBy,
+    ...(ratingSort && { rating_sort: ratingSort }),
   };
 
   const { data: advertisements, isLoading, error } = useAdvertisementsAll(filters);
@@ -35,6 +38,8 @@ export const Home = () => {
         selectedStatus={selectedStatus}
         onStatusChange={setSelectedStatus}
         sortBy={sortBy}
+        ratingSort={ratingSort}
+        onRatingSortChange={setRatingSort}
         onSortChange={setSortBy}
         onClearFilters={handleClearFilters}
       />

@@ -38,7 +38,7 @@ export const AppRouter = () => {
       <Route path="/advertisement/edit/:id" element={<EditAdvertisement />} />
 
       <Route
-        path="/create"
+        path="/create-advertisement"
         element={
           <ProtectedRoute>
             <CreateAdvertisement />
