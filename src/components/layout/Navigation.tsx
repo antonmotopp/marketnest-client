@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/stores';
 
 export const Navigation = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuthStore();
+  const location = useLocation();
 
   const navigations = [
     { title: 'Home', link: '/' },
@@ -12,10 +13,8 @@ export const Navigation = () => {
   ];
 
   const profileMenuItems = [
-    { title: 'My Profile', link: '/profile' },
     { title: 'My Ads', link: '/my-ads' },
     { title: 'Messages', link: '/messages' },
-    { title: 'Settings', link: '/settings' },
   ];
 
   const handleLogout = () => {
@@ -23,8 +22,22 @@ export const Navigation = () => {
     setIsProfileOpen(false);
   };
 
+  const isActiveLink = (link: string) => {
+    return location.pathname === link;
+  };
+
+  const getLinkClasses = (link: string) => {
+    const baseClasses = 'font-medium transition-colors';
+    const activeClasses = 'text-blue-600 border-b-2 border-blue-600 pb-1 hover:cursor-default';
+    const inactiveClasses = 'text-gray-700 hover:text-blue-600';
+
+    return isActiveLink(link)
+      ? `${baseClasses} ${activeClasses}`
+      : `${baseClasses} ${inactiveClasses}`;
+  };
+
   return (
-    <div className="flex justify-between items-center py-4">
+    <div className="flex justify-between items-center py-2">
       <Link to="/" className="flex items-center">
         <div className="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
           <span className="text-white font-bold text-sm">M</span>
@@ -32,23 +45,18 @@ export const Navigation = () => {
         <span className="ml-2 text-xl font-bold text-gray-900">Marketplace</span>
       </Link>
 
-      <div className="flex-1 max-w-lg mx-8">
-        <input
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Search products..."
-        />
-      </div>
-
       <div className="flex gap-8 items-center">
-        {navigations.map(({ title, link }) => (
-          <Link
-            to={link}
-            key={title}
-            className="text-gray-700 hover:text-blue-600 font-medium transition-colors"
-          >
-            {title}
-          </Link>
-        ))}
+        {navigations.map(({ title, link }) =>
+          isActiveLink(link) ? (
+            <span key={title} className={getLinkClasses(link)}>
+              {title}
+            </span>
+          ) : (
+            <Link to={link} key={title} className={getLinkClasses(link)}>
+              {title}
+            </Link>
+          )
+        )}
 
         {isAuthenticated ? (
           <div

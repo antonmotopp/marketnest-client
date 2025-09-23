@@ -1,33 +1,44 @@
 import { Routes, Route } from 'react-router-dom';
 import {
   AdvertisementDetail,
+  Chat,
   CreateAdvertisement,
+  EditAdvertisement,
   Home,
   Login,
   Messages,
   MyAdvertisements,
-  Profile,
   Register,
 } from '@/pages';
-import { ProtectedRoute } from '@/components/auth';
+import { ProtectedRoute, PublicRoute } from '@/components/auth';
 
 export const AppRouter = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/advertisement/:id" element={<AdvertisementDetail />} />
+
       <Route
-        path="/profile"
+        path="/login"
         element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
         }
       />
       <Route
-        path="/create"
+        path="/register"
+        element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        }
+      />
+
+      <Route path="/advertisement/:id" element={<AdvertisementDetail />} />
+      <Route path="/advertisement/edit/:id" element={<EditAdvertisement />} />
+
+      <Route
+        path="/create-advertisement"
         element={
           <ProtectedRoute>
             <CreateAdvertisement />
@@ -47,6 +58,14 @@ export const AppRouter = () => {
         element={
           <ProtectedRoute>
             <Messages />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages/:userId"
+        element={
+          <ProtectedRoute>
+            <Chat />
           </ProtectedRoute>
         }
       />

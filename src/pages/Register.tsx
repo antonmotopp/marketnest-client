@@ -14,6 +14,14 @@ export const Register = () => {
   const navigate = useNavigate();
   const { isLoading, requestHandler } = useRequestHandler();
 
+  const isValidEmail = email.includes('@') && email.includes('.');
+  const isValidForm =
+    username.length >= 3 &&
+    username.length <= 50 &&
+    isValidEmail &&
+    password.length >= 8 &&
+    password === confirmPassword;
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -129,7 +137,7 @@ export const Register = () => {
           <div>
             <button
               type="submit"
-              disabled={isLoading || password !== confirmPassword}
+              disabled={isLoading || !isValidForm}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? 'Creating account...' : 'Create account'}
