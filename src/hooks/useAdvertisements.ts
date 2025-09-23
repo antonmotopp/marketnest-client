@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { advertisementsApi, type AdvertisementFilters } from '@/api';
+import { advertisementsApi } from '@/api';
+import type { IAdvertisementFilters } from '@/types';
 
-export const useAdvertisementsList = (filters: AdvertisementFilters = {}) => {
+export const useAdvertisementsAll = (filters: IAdvertisementFilters = {}) => {
   return useQuery({
     queryKey: ['advertisements', filters],
     queryFn: () => advertisementsApi.getAll(filters),
@@ -9,7 +10,7 @@ export const useAdvertisementsList = (filters: AdvertisementFilters = {}) => {
   });
 };
 
-export const useAdvertisementDetail = (id: string | undefined) => {
+export const useAdvertisementById = (id: string | undefined) => {
   return useQuery({
     queryKey: ['advertisement', id],
     queryFn: () => advertisementsApi.getById(id!),

@@ -1,6 +1,6 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAdvertisementDetail, useRequestHandler, useUser } from '@/hooks';
+import { useAdvertisementById, useRequestHandler, useUser } from '@/hooks';
 import { advertisementsApi } from '@/api';
 import { useAuthStore } from '@/stores';
 
@@ -12,7 +12,7 @@ export const EditAdvertisement = () => {
   const { id } = useParams<Params>();
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.user);
-  const { data: advertisement, refetch } = useAdvertisementDetail(id);
+  const { data: advertisement, refetch } = useAdvertisementById(id);
   const { data: owner } = useUser(advertisement?.user_id);
 
   const [title, setTitle] = useState('');
@@ -188,11 +188,9 @@ export const EditAdvertisement = () => {
           </div>
         </div>
 
-        {/* Секція для керування фото */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Photos Management</label>
 
-          {/* Поточні фото */}
           {existingPhotos.length > 0 && (
             <div className="mb-4">
               <h4 className="text-sm font-medium text-gray-600 mb-2">Current Photos:</h4>
@@ -220,7 +218,6 @@ export const EditAdvertisement = () => {
             </div>
           )}
 
-          {/* Додавання нових фото */}
           <div className="mb-4">
             <div className="flex gap-2 mb-2">
               <label
@@ -260,7 +257,6 @@ export const EditAdvertisement = () => {
             />
           </div>
 
-          {/* Превью нових фото */}
           {photos.length > 0 && (
             <div>
               <h4 className="text-sm font-medium text-gray-600 mb-2">New Photos to Upload:</h4>

@@ -8,6 +8,14 @@ export interface IAdvertisement {
   user_id: number;
   created_at: string;
   updated_at: string;
-  image: string;
+  photo_count: number;
   photos: string[];
+}
+
+export interface IAdvertisementFilters {
+  category?: string;
+  user_id?: string;
+  status?: string;
+  search?: string;
+  sort_by?: string;
 }

@@ -1,12 +1,5 @@
 import { api } from '@/lib';
-import type { IAdvertisement } from '@/types';
-
-export interface AdvertisementFilters {
-  category?: string;
-  user_id?: string;
-  status?: string;
-  search?: string;
-}
+import type { IAdvertisement, IAdvertisementFilters } from '@/types';
 
 export const advertisementsApi = {
   async create(data: FormData): Promise<IAdvertisement> {
@@ -29,13 +22,21 @@ export const advertisementsApi = {
     return response.data;
   },
 
-  async getAll(filters: AdvertisementFilters = {}): Promise<IAdvertisement[]> {
+  updateStatus: async (id: string | number, newStatus: string): Promise<IAdvertisement> => {
+    const response = await api.patch(`/advertisements/${id}/status`, {
+      new_status: newStatus,
+    });
+    return response.data;
+  },
+
+  async getAll(filters: IAdvertisementFilters = {}): Promise<IAdvertisement[]> {
     const params = new URLSearchParams();
 
     if (filters.category) params.append('category', filters.category);
     if (filters.user_id) params.append('user_id', filters.user_id);
     if (filters.status) params.append('status', filters.status);
     if (filters.search) params.append('search', filters.search);
+    if (filters.sort_by) params.append('sort_by', filters.sort_by);
 
     const response = await api.get(`/advertisements/all?${params.toString()}`);
 
@@ -44,6 +45,14 @@ export const advertisementsApi = {
 
   async getById(id: string): Promise<IAdvertisement> {
     const response = await api.get(`/advertisements/${id}`);
+    return response.data;
+  },
+
+  markSold: async (id: number, buyerId: number): Promise<IAdvertisement> => {
+    const formData = new FormData();
+    formData.append('buyer_id', buyerId.toString());
+
+    const response = await api.patch(`/advertisements/${id}/mark-sold`, formData);
     return response.data;
   },
 

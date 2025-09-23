@@ -14,7 +14,6 @@ export const Register = () => {
   const navigate = useNavigate();
   const { isLoading, requestHandler } = useRequestHandler();
 
-  // Валідація форми
   const isValidEmail = email.includes('@') && email.includes('.');
   const isValidForm =
     username.length >= 3 &&

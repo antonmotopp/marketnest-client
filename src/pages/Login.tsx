@@ -12,7 +12,6 @@ export const Login = () => {
   const setAuth = useAuthStore((state) => state.setAuth);
   const { isLoading, requestHandler } = useRequestHandler();
 
-  // Валідація форми
   const isValidForm = username.length >= 3 && password.length >= 8;
 
   const handleSubmit = async (e: FormEvent) => {

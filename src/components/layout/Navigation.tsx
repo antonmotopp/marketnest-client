@@ -13,10 +13,8 @@ export const Navigation = () => {
   ];
 
   const profileMenuItems = [
-    { title: 'My Profile', link: '/profile' },
     { title: 'My Ads', link: '/my-ads' },
     { title: 'Messages', link: '/messages' },
-    { title: 'Settings', link: '/settings' },
   ];
 
   const handleLogout = () => {

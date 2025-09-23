@@ -1,6 +1,6 @@
 import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAdvertisementsList, useRequestHandler } from '@/hooks';
+import { useAdvertisementsAll, useRequestHandler } from '@/hooks';
 import { advertisementsApi } from '@/api';
 
 export const CreateAdvertisement = () => {
@@ -12,7 +12,7 @@ export const CreateAdvertisement = () => {
 
   const navigate = useNavigate();
   const { isLoading, requestHandler } = useRequestHandler();
-  const { refetch } = useAdvertisementsList();
+  const { refetch } = useAdvertisementsAll();
 
   const categories = [
     { value: 'electronics', label: 'Electronics' },

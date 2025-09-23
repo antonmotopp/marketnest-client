@@ -1,19 +1,30 @@
-import { useAdvertisementsList } from '@/hooks';
-import { AdvertisementCard } from '@/components/features/advertisements';
+import { useState } from 'react';
+import { useAdvertisementsAll } from '@/hooks';
 import { useAuthStore } from '@/stores';
+import {
+  MyAdvertisementsEmptyState,
+  MyAdvertisementsFilters,
+  MyAdvertisementsHeader,
+  MyAdvertisementsList,
+} from '@/components/features/my-advertisements';
 
 export const MyAdvertisements = () => {
   const currentUser = useAuthStore((state) => state.user);
+  const [statusFilter, setStatusFilter] = useState('');
+
   const {
     data: advertisements,
     isLoading,
     error,
-  } = useAdvertisementsList({ user_id: currentUser?.id.toString() });
+  } = useAdvertisementsAll({
+    user_id: currentUser?.id.toString(),
+    ...(statusFilter && { status: statusFilter }),
+  });
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-64">
-        <div className="text-lg">Loading products...</div>
+        <div className="text-lg">Loading your advertisements...</div>
       </div>
     );
   }
@@ -21,24 +32,23 @@ export const MyAdvertisements = () => {
   if (error) {
     return (
       <div className="text-center text-red-600">
-        Error loading products. Please try again later.
+        Error loading your advertisements. Please try again later.
       </div>
     );
   }
 
+  const adCount = advertisements?.length || 0;
+
   return (
     <div className="space-y-6 w-full">
-      {advertisements && advertisements.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {advertisements.map((advertisement) => (
-            <AdvertisementCard advertisement={advertisement} key={advertisement.id} />
-          ))}
-        </div>
+      <MyAdvertisementsHeader adCount={adCount} />
+
+      <MyAdvertisementsFilters statusFilter={statusFilter} onStatusFilterChange={setStatusFilter} />
+
+      {advertisements?.length ? (
+        <MyAdvertisementsList advertisements={advertisements} />
       ) : (
-        <div className="text-center text-gray-500 py-12">
-          <div className="text-xl mb-2">No products found</div>
-          <div>Try adjusting your search or filters</div>
-        </div>
+        <MyAdvertisementsEmptyState hasFilter={!!statusFilter} filterType={statusFilter} />
       )}
     </div>
   );
