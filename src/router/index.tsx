@@ -1,12 +1,13 @@
 import { Routes, Route } from 'react-router-dom';
 import {
   AdvertisementDetail,
+  Chat,
   CreateAdvertisement,
+  EditAdvertisement,
   Home,
   Login,
   Messages,
   MyAdvertisements,
-  Profile,
   Register,
 } from '@/pages';
 import { ProtectedRoute, PublicRoute } from '@/components/auth';
@@ -34,17 +35,10 @@ export const AppRouter = () => {
       />
 
       <Route path="/advertisement/:id" element={<AdvertisementDetail />} />
+      <Route path="/advertisement/edit/:id" element={<EditAdvertisement />} />
 
       <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/create"
+        path="/create-advertisement"
         element={
           <ProtectedRoute>
             <CreateAdvertisement />
@@ -64,6 +58,14 @@ export const AppRouter = () => {
         element={
           <ProtectedRoute>
             <Messages />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages/:userId"
+        element={
+          <ProtectedRoute>
+            <Chat />
           </ProtectedRoute>
         }
       />
