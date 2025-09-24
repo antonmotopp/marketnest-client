@@ -97,11 +97,6 @@ export const EditAdvertisement = () => {
     setExistingPhotos((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const clearAllPhotos = () => {
-    setPhotos([]);
-    setExistingPhotos([]);
-  };
-
   const base64ToFile = async (base64String: string, fileName: string): Promise<File> => {
     const response = await fetch(base64String);
     const blob = await response.blob();
@@ -135,7 +130,12 @@ export const EditAdvertisement = () => {
     });
   };
 
-  const isFormValid = title.trim() && description.trim() && price && category;
+  const isTitleValid = title.trim().length > 0 && title.trim().length <= 100;
+  const isDescriptionValid = description.trim().length > 0 && description.trim().length <= 1000;
+  const isPriceValid = price && parseFloat(price) > 0;
+  const isCategoryValid = category.length > 0;
+
+  const isFormValid = isTitleValid && isDescriptionValid && isPriceValid && isCategoryValid;
   const selectedCategory = categories.find((cat) => cat.value === category);
   const totalPhotos = existingPhotos.length + photos.length;
 
@@ -206,7 +206,11 @@ export const EditAdvertisement = () => {
                     onChange={(e) => setTitle(e.target.value)}
                     disabled={isLoading}
                     placeholder="What are you selling?"
-                    className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`w-full px-4 py-3 bg-gray-50/50 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+                      title.length > 100
+                        ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
+                        : 'border border-gray-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent'
+                    }`}
                   />
                   <div className="text-xs text-gray-500">{title.length}/100 characters</div>
                 </div>
@@ -226,7 +230,11 @@ export const EditAdvertisement = () => {
                     disabled={isLoading}
                     rows={6}
                     placeholder="Describe your item in detail..."
-                    className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed resize-none"
+                    className={`w-full px-4 py-3 bg-gray-50/50 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed resize-none ${
+                      description.length > 1000
+                        ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
+                        : 'border border-gray-200 focus:ring-2 focus:ring-amber-500 focus:border-transparent'
+                    }`}
                   />
                   <div className="text-xs text-gray-500">{description.length}/1000 characters</div>
                 </div>
@@ -305,16 +313,6 @@ export const EditAdvertisement = () => {
 
                   {existingPhotos.length > 0 && (
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-medium text-gray-700">Current Photos</h4>
-                        <button
-                          type="button"
-                          onClick={() => setExistingPhotos([])}
-                          className="text-xs text-red-500 hover:text-red-700 transition-colors"
-                        >
-                          Remove All Current
-                        </button>
-                      </div>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {existingPhotos.map((photo, index) => (
                           <div key={index} className="relative group">
@@ -461,18 +459,6 @@ export const EditAdvertisement = () => {
                       </div>
                     </div>
                   )}
-
-                  {(existingPhotos.length > 0 || photos.length > 0) && (
-                    <div className="text-center">
-                      <button
-                        type="button"
-                        onClick={clearAllPhotos}
-                        className="px-4 py-2 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition-colors text-sm font-medium"
-                      >
-                        Clear All Photos
-                      </button>
-                    </div>
-                  )}
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
@@ -591,7 +577,9 @@ export const EditAdvertisement = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900">{title || 'Your listing title'}</h4>
+                  <h4 className="font-semibold text-gray-900 line-clamp-2 break-words">
+                    {title || 'Your listing title'}
+                  </h4>
                   <p className="text-lg font-bold text-amber-600">
                     {price ? `$${price}` : '$0.00'}
                   </p>

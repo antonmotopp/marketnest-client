@@ -193,7 +193,7 @@ export const Chat = () => {
     <div className="flex flex-col">
       <div className="backdrop-blur-sm  border-gray-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto">
-          <ChatHeader otherUser={otherUser} onBack={handleBack} />
+          {otherUser && <ChatHeader otherUser={otherUser} onBack={handleBack} />}
         </div>
       </div>
 
