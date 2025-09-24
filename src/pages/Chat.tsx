@@ -5,6 +5,7 @@ import { useAuthStore } from '@/stores';
 import { ChatHeader, MessageInput, MessagesList } from '@/components/features/messages';
 import { useEffect } from 'react';
 import type { IMessage } from '@/types';
+import { useUser } from '@/hooks';
 
 type Params = {
   userId: string;
@@ -15,6 +16,7 @@ export const Chat = () => {
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.user);
   const queryClient = useQueryClient();
+  const { data: otherUser } = useUser(userId);
 
   const {
     data: messages,
@@ -96,7 +98,6 @@ export const Chat = () => {
           </div>
         </div>
 
-        {/* Loading Input */}
         <div className="bg-white/80 backdrop-blur-sm border-t border-gray-200 p-4">
           <div className="max-w-4xl mx-auto">
             <div className="w-full h-12 bg-gray-200 rounded-xl animate-pulse"></div>
@@ -192,7 +193,7 @@ export const Chat = () => {
     <div className="flex flex-col">
       <div className="backdrop-blur-sm  border-gray-200 sticky top-0 z-10">
         <div className="max-w-4xl mx-auto">
-          <ChatHeader otherUserId={userId} onBack={handleBack} />
+          <ChatHeader otherUser={otherUser} onBack={handleBack} />
         </div>
       </div>
 

@@ -11,6 +11,8 @@ interface Props {
   isOwner: boolean;
   advertisementStatus: string;
   advertisementId: number;
+  sellerRatings: IRating[];
+  averageRating: number;
   onBuyNow: any;
 }
 
@@ -19,30 +21,32 @@ export const AdvertisementSellerInfo = ({
   isOwner,
   advertisementStatus,
   advertisementId,
+  sellerRatings,
+  averageRating,
   onBuyNow,
 }: Props) => {
   const currentUser = useAuthStore((state) => state.user);
-  const [sellerRatings, setSellerRatings] = useState<IRating[]>([]);
-  const [averageRating, setAverageRating] = useState<number>(0);
+  // const [sellerRatings, setSellerRatings] = useState<IRating[]>([]);
+  // const [averageRating, setAverageRating] = useState<number>(0);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [canRate, setCanRate] = useState(false);
 
-  useEffect(() => {
-    const fetchSellerRatings = async () => {
-      try {
-        const ratings = await ratingsApi.getUserRatings(owner.id);
-        setSellerRatings(ratings);
-
-        if (ratings.length > 0) {
-          const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
-          setAverageRating(Math.round(avg * 10) / 10);
-        }
-      } catch (error) {
-        console.error('Error fetching seller ratings:', error);
-      }
-    };
-    fetchSellerRatings();
-  }, [owner.id]);
+  // useEffect(() => {
+  //   const fetchSellerRatings = async () => {
+  //     try {
+  //       const ratings = await ratingsApi.getUserRatings(owner.id);
+  //       setSellerRatings(ratings);
+  //
+  //       if (ratings.length > 0) {
+  //         const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+  //         setAverageRating(Math.round(avg * 10) / 10);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching seller ratings:', error);
+  //     }
+  //   };
+  //   fetchSellerRatings();
+  // }, [owner.id]);
 
   useEffect(() => {
     const checkCanRate = async () => {
