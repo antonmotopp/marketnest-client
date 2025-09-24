@@ -117,7 +117,7 @@ export const AdvertisementSellerInfo = ({
         {sellerRatings.length > 0 && (
           <div>
             <h4 className="font-medium mb-3">Recent Reviews</h4>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
+            <div className="space-y-3 overflow-y-auto">
               {sellerRatings.slice(0, 3).map((rating) => (
                 <div key={rating.id} className="bg-gray-50 p-3 rounded-lg">
                   <div className="flex items-center justify-between mb-2">

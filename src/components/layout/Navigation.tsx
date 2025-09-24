@@ -9,7 +9,7 @@ export const Navigation = () => {
 
   const navigations = [
     { title: 'Home', link: '/' },
-    { title: 'Create Ad', link: '/create' },
+    { title: 'Create Ad', link: '/create-advertisement' },
   ];
 
   const profileMenuItems = [

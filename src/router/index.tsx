@@ -8,6 +8,7 @@ import {
   Login,
   Messages,
   MyAdvertisements,
+  NotFound,
   Register,
 } from '@/pages';
 import { ProtectedRoute, PublicRoute } from '@/components/auth';
@@ -69,6 +70,8 @@ export const AppRouter = () => {
           </ProtectedRoute>
         }
       />
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };

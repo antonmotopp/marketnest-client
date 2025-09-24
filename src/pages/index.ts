@@ -6,4 +6,5 @@ export { Home } from './Home';
 export { Login } from './Login';
 export { Messages } from './Messages';
 export { MyAdvertisements } from './MyAdvertisements';
+export { NotFound } from './NotFound';
 export { Register } from './Register';

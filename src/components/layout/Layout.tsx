@@ -7,12 +7,10 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100">
       <Header />
 
-      <main className="container justify-center items-center mx-auto flex mt-12 px-4">
-        {children}
-      </main>
+      <main className="h-full container mx-auto py-20 px-4">{children}</main>
 
       <Footer />
     </div>
