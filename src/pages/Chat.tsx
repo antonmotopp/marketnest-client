@@ -30,7 +30,7 @@ export const Chat = () => {
 
   useEffect(() => {
     if (!currentUser) return;
-    const ws = new WebSocket(`ws://localhost:8000/chat/ws/${currentUser.id}`);
+    const ws = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
 
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
