@@ -30,20 +30,60 @@ export const Chat = () => {
 
   useEffect(() => {
     if (!currentUser) return;
-    const ws = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
+
+    const wsUrl = `wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`;
+    console.log('Connecting to WebSocket:', wsUrl);
+
+    const ws = new WebSocket(wsUrl);
+
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
 
     ws.onmessage = (event) => {
+      console.log('WebSocket message received:', event.data);
       const data = JSON.parse(event.data);
       if (data.type === 'new_message') {
-        queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => [
-          ...oldData,
-          data.message,
-        ]);
+        console.log('New message data:', data.message);
+        queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => {
+          console.log('Old data:', oldData);
+          const newData = [...(oldData || []), data.message];
+          console.log('New data:', newData);
+          return newData;
+        });
       }
     };
 
-    return () => ws.close();
-  }, [currentUser, currentUser?.id, queryClient, userId]);
+    ws.onclose = (event) => {
+      console.log('WebSocket closed:', event.code, event.reason);
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    return () => {
+      console.log('Closing WebSocket');
+      ws.close();
+    };
+  }, [currentUser, userId, queryClient]);
+
+  // useEffect(() => {
+  //   if (!currentUser) return;
+  //   const ws = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
+  //
+  //   ws.onmessage = (event) => {
+  //     const data = JSON.parse(event.data);
+  //     if (data.type === 'new_message') {
+  //       queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => [
+  //         ...oldData,
+  //         data.message,
+  //       ]);
+  //     }
+  //   };
+  //
+  //   return () => ws.close();
+  // }, [currentUser, currentUser?.id, queryClient, userId]);
 
   const sendMessageMutation = useMutation({
     mutationFn: messagesApi.sendMessage,
