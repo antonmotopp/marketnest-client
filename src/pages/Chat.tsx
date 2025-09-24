@@ -30,60 +30,20 @@ export const Chat = () => {
 
   useEffect(() => {
     if (!currentUser) return;
-
-    const wsUrl = `wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`;
-    console.log('Connecting to WebSocket:', wsUrl);
-
-    const ws = new WebSocket(wsUrl);
-
-    ws.onopen = () => {
-      console.log('WebSocket connected');
-    };
+    const ws = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
 
     ws.onmessage = (event) => {
-      console.log('WebSocket message received:', event.data);
       const data = JSON.parse(event.data);
       if (data.type === 'new_message') {
-        console.log('New message data:', data.message);
-        queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => {
-          console.log('Old data:', oldData);
-          const newData = [...(oldData || []), data.message];
-          console.log('New data:', newData);
-          return newData;
-        });
+        queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => [
+          ...oldData,
+          data.message,
+        ]);
       }
     };
 
-    ws.onclose = (event) => {
-      console.log('WebSocket closed:', event.code, event.reason);
-    };
-
-    ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    return () => {
-      console.log('Closing WebSocket');
-      ws.close();
-    };
-  }, [currentUser, userId, queryClient]);
-
-  // useEffect(() => {
-  //   if (!currentUser) return;
-  //   const ws = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
-  //
-  //   ws.onmessage = (event) => {
-  //     const data = JSON.parse(event.data);
-  //     if (data.type === 'new_message') {
-  //       queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => [
-  //         ...oldData,
-  //         data.message,
-  //       ]);
-  //     }
-  //   };
-  //
-  //   return () => ws.close();
-  // }, [currentUser, currentUser?.id, queryClient, userId]);
+    return () => ws.close();
+  }, [currentUser, currentUser?.id, queryClient, userId]);
 
   const sendMessageMutation = useMutation({
     mutationFn: messagesApi.sendMessage,
@@ -119,7 +79,6 @@ export const Chat = () => {
           </div>
         </div>
 
-        {/* Loading Messages */}
         <div className="flex-1 max-w-4xl mx-auto w-full p-4">
           <div className="space-y-4">
             {[1, 2, 3, 4, 5].map((item) => (
