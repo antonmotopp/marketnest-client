@@ -168,7 +168,6 @@ export const EditAdvertisement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-amber-500 to-orange-600 rounded-2xl shadow-lg mb-4">
             <svg
@@ -192,11 +191,9 @@ export const EditAdvertisement = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Form */}
           <div className="lg:col-span-2">
             <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-8">
               <form onSubmit={handleSubmit} className="space-y-8">
-                {/* Title */}
                 <div className="space-y-2">
                   <label htmlFor="title" className="block text-sm font-semibold text-gray-700">
                     Title <span className="text-red-500">*</span>
@@ -214,7 +211,6 @@ export const EditAdvertisement = () => {
                   <div className="text-xs text-gray-500">{title.length}/100 characters</div>
                 </div>
 
-                {/* Description */}
                 <div className="space-y-2">
                   <label
                     htmlFor="description"
@@ -235,7 +231,6 @@ export const EditAdvertisement = () => {
                   <div className="text-xs text-gray-500">{description.length}/1000 characters</div>
                 </div>
 
-                {/* Price and Category */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label htmlFor="price" className="block text-sm font-semibold text-gray-700">
@@ -300,7 +295,6 @@ export const EditAdvertisement = () => {
                   </div>
                 </div>
 
-                {/* Photo Management */}
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-semibold text-gray-700">
@@ -309,7 +303,6 @@ export const EditAdvertisement = () => {
                     <div className="text-xs text-gray-500">{totalPhotos}/5 photos</div>
                   </div>
 
-                  {/* Current Photos */}
                   {existingPhotos.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -364,7 +357,6 @@ export const EditAdvertisement = () => {
                     </div>
                   )}
 
-                  {/* New Photos Upload */}
                   {totalPhotos < 5 && (
                     <div
                       className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all duration-200 ${
@@ -416,7 +408,6 @@ export const EditAdvertisement = () => {
                     </div>
                   )}
 
-                  {/* New Photos Preview */}
                   {photos.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
@@ -471,7 +462,6 @@ export const EditAdvertisement = () => {
                     </div>
                   )}
 
-                  {/* Clear All Button */}
                   {(existingPhotos.length > 0 || photos.length > 0) && (
                     <div className="text-center">
                       <button
@@ -485,7 +475,6 @@ export const EditAdvertisement = () => {
                   )}
                 </div>
 
-                {/* Submit Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
                   <button
                     type="button"
@@ -548,7 +537,6 @@ export const EditAdvertisement = () => {
             </div>
           </div>
 
-          {/* Preview Sidebar */}
           <div className="space-y-6">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
@@ -617,7 +605,6 @@ export const EditAdvertisement = () => {
               </div>
             </div>
 
-            {/* Update Tips */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                 <svg

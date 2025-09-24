@@ -2,7 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores';
 import { formatDate } from '@/utils';
 import { useAdvertisementById, useAdvertisementsAll, useRequestHandler, useUser } from '@/hooks';
-import { advertisementsApi } from '@/api';
+import { advertisementsApi, ratingsApi } from '@/api';
 import {
   AdvertisementHeader,
   AdvertisementOwnerActions,
@@ -10,6 +10,8 @@ import {
   AdvertisementSellerInfo,
 } from '@/components/features/advertisements';
 import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import type { IRating } from '@/types';
 
 type Params = {
   id: string;
@@ -20,6 +22,8 @@ export const AdvertisementDetail = () => {
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.user);
   const { requestHandler } = useRequestHandler();
+  const [sellerRatings, setSellerRatings] = useState<IRating[]>([]);
+  const [averageRating, setAverageRating] = useState<number>(0);
 
   const {
     data: advertisement,
@@ -32,7 +36,8 @@ export const AdvertisementDetail = () => {
     isLoading: ownerLoading,
     error: ownerError,
   } = useUser(advertisement?.user_id);
-  const { refetch: refetchAll } = useAdvertisementsAll();
+
+  const { refetch: refetchAll } = useAdvertisementsAll({ user_id: currentUser?.id.toString() });
 
   const buyMutation = useMutation({
     mutationFn: advertisementsApi.buyAdvertisement,
@@ -41,6 +46,25 @@ export const AdvertisementDetail = () => {
       refetchAll();
     },
   });
+
+  useEffect(() => {
+    if (!owner) return;
+
+    const fetchSellerRatings = async () => {
+      try {
+        const ratings = await ratingsApi.getUserRatings(owner.id);
+        setSellerRatings(ratings);
+
+        if (ratings.length > 0) {
+          const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
+          setAverageRating(Math.round(avg * 10) / 10);
+        }
+      } catch (error) {
+        console.error('Error fetching seller ratings:', error);
+      }
+    };
+    fetchSellerRatings();
+  }, [owner, owner?.id]);
 
   const handleBuyNow = async () => {
     if (!advertisement) return;
@@ -52,6 +76,8 @@ export const AdvertisementDetail = () => {
     if (confirmed) {
       buyMutation.mutate(advertisement.id);
     }
+
+    refetchOne();
   };
 
   if (adLoading || ownerLoading) {
@@ -173,6 +199,7 @@ export const AdvertisementDetail = () => {
     await requestHandler(() => advertisementsApi.delete(advertisement.id), {
       successMessage: 'Advertisement deleted successfully',
       onSuccess: () => {
+        refetchAll();
         navigate('/my-ads');
       },
     });
@@ -269,6 +296,8 @@ export const AdvertisementDetail = () => {
                 isOwner={isOwner}
                 advertisementStatus={advertisement.status}
                 advertisementId={advertisement.id}
+                sellerRatings={sellerRatings}
+                averageRating={averageRating}
                 onBuyNow={handleBuyNow}
               />
             )}

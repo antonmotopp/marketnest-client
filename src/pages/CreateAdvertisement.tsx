@@ -2,6 +2,7 @@ import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdvertisementsAll, useRequestHandler } from '@/hooks';
 import { advertisementsApi } from '@/api';
+import { useAuthStore } from '@/stores';
 
 export const CreateAdvertisement = () => {
   const [title, setTitle] = useState('');
@@ -13,7 +14,8 @@ export const CreateAdvertisement = () => {
 
   const navigate = useNavigate();
   const { isLoading, requestHandler } = useRequestHandler();
-  const { refetch } = useAdvertisementsAll();
+  const currentUser = useAuthStore((state) => state.user);
+  const { refetch } = useAdvertisementsAll({ user_id: currentUser?.id.toString() });
 
   const categories = [
     { value: 'electronics', label: 'Electronics', icon: '📱' },
@@ -72,8 +74,8 @@ export const CreateAdvertisement = () => {
     await requestHandler(() => advertisementsApi.create(formData), {
       successMessage: 'Advertisement created successfully!',
       onSuccess: () => {
-        navigate('/my-ads');
         refetch();
+        navigate('/my-ads');
       },
     });
   };
@@ -84,7 +86,6 @@ export const CreateAdvertisement = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg mb-4">
             <svg
@@ -376,7 +377,7 @@ export const CreateAdvertisement = () => {
                             d="M12 4v16m8-8H4"
                           />
                         </svg>
-                        Create Listing
+                        Create
                       </>
                     )}
                   </button>
@@ -439,7 +440,9 @@ export const CreateAdvertisement = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900">{title || 'Your listing title'}</h4>
+                  <h4 className="font-semibold text-gray-900">
+                    {title || 'Your advertisement title'}
+                  </h4>
                   <p className="text-lg font-bold text-blue-600">{price ? `$${price}` : '$0.00'}</p>
                   {selectedCategory && (
                     <div className="inline-flex items-center mt-2 px-2 py-1 bg-blue-100 rounded-full text-xs">

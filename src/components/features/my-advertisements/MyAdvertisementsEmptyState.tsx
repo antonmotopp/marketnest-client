@@ -7,7 +7,7 @@ interface Props {
 
 export const MyAdvertisementsEmptyState = ({ hasFilter, filterType }: Props) => {
   return (
-    <div className="text-center py-16 bg-gray-50 rounded-lg">
+    <div className="text-center py-16  rounded-lg">
       <div className="max-w-sm mx-auto">
         <div className="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
           <svg
