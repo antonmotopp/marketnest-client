@@ -98,7 +98,6 @@ export const Login = () => {
               )}
             </div>
 
-            {/* Password Input */}
             <div className="space-y-2">
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700">
                 Password
@@ -162,6 +161,7 @@ export const Login = () => {
                   )}
                 </button>
               </div>
+
               {password.length > 0 && password.length < 8 && (
                 <p className="text-xs text-red-500 flex items-center mt-1">
                   <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -176,7 +176,6 @@ export const Login = () => {
               )}
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={isLoading || !isValidForm}

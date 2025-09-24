@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import type { IAdvertisement } from '@/types';
 import { formatDate } from '@/utils';
-import { useAuthStore } from '@/stores';
+// import { useAuthStore } from '@/stores';
 import { ratingsApi } from '@/api';
 
 type Props = {
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const AdvertisementCard = ({ advertisement }: Props) => {
-  const currentUser = useAuthStore((state) => state.user);
+  // const currentUser = useAuthStore((state) => state.user);
   const [sellerRating, setSellerRating] = useState<number | null>(null);
   const [totalReviews, setTotalReviews] = useState<number>(0);
   const [imageLoading, setImageLoading] = useState(true);
@@ -82,7 +82,7 @@ export const AdvertisementCard = ({ advertisement }: Props) => {
 
   const statusConfig = getStatusConfig(advertisement.status);
   const categoryIcon = getCategoryIcon(advertisement.category);
-  const isOwner = advertisement.user_id === currentUser?.id;
+  // const isOwner = advertisement.user_id === currentUser?.id;
 
   return (
     <Link
@@ -151,16 +151,16 @@ export const AdvertisementCard = ({ advertisement }: Props) => {
           </div>
         </div>
 
-        {isOwner && (
-          <div className="absolute top-3 right-3">
-            <div className="flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white shadow-lg backdrop-blur-sm">
-              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M10 2L3 7v11a1 1 0 001 1h3v-8h6v8h3a1 1 0 001-1V7l-7-5z" />
-              </svg>
-              <span>Your Ad</span>
-            </div>
-          </div>
-        )}
+        {/*{isOwner && (*/}
+        {/*  <div className="absolute top-3 right-3">*/}
+        {/*    <div className="flex items-center space-x-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white shadow-lg backdrop-blur-sm">*/}
+        {/*      <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">*/}
+        {/*        <path d="M10 2L3 7v11a1 1 0 001 1h3v-8h6v8h3a1 1 0 001-1V7l-7-5z" />*/}
+        {/*      </svg>*/}
+        {/*      <span>Your Ad</span>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*)}*/}
 
         {advertisement.photos.length > 1 && (
           <div className="absolute bottom-3 right-3">

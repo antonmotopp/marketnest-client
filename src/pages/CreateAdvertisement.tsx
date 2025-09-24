@@ -1,8 +1,8 @@
 import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAdvertisementsAll, useRequestHandler } from '@/hooks';
+import { useRequestHandler } from '@/hooks';
 import { advertisementsApi } from '@/api';
-import { useAuthStore } from '@/stores';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const CreateAdvertisement = () => {
   const [title, setTitle] = useState('');
@@ -14,8 +14,7 @@ export const CreateAdvertisement = () => {
 
   const navigate = useNavigate();
   const { isLoading, requestHandler } = useRequestHandler();
-  const currentUser = useAuthStore((state) => state.user);
-  const { refetch } = useAdvertisementsAll({ user_id: currentUser?.id.toString() });
+  const queryClient = useQueryClient();
 
   const categories = [
     { value: 'electronics', label: 'Electronics', icon: '📱' },
@@ -74,7 +73,7 @@ export const CreateAdvertisement = () => {
     await requestHandler(() => advertisementsApi.create(formData), {
       successMessage: 'Advertisement created successfully!',
       onSuccess: () => {
-        refetch();
+        queryClient.invalidateQueries({ queryKey: ['advertisements'] });
         navigate('/my-ads');
       },
     });
