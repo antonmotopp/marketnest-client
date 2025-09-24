@@ -5,7 +5,7 @@ interface Props {
 
 export const ChatHeader = ({ otherUserId, onBack }: Props) => {
   return (
-    <div className="flex items-center gap-4 p-4 border-b">
+    <div className="flex items-center gap-4 p-4">
       <button onClick={onBack} className="text-gray-600 hover:text-gray-800">
         ← Back
       </button>
