@@ -80,7 +80,7 @@ export const AdvertisementSellerInfo = ({
                   Buy Now
                 </button>
                 <Link
-                  to={`/advertisement/${advertisementId}/messages/${owner.id}`}
+                  to={`/messages/${owner.id}`}
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-center"
                 >
                   Contact Seller

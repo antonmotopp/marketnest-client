@@ -29,27 +29,123 @@ export const Chat = () => {
     enabled: !!userId,
   });
 
+  // useEffect(() => {
+  //   if (!currentUser) return;
+  //
+  //   const ws = new WebSocket(`ws://localhost:8000/chat/ws/${currentUser.id}`);
+  //
+  //   ws.onopen = () => {
+  //     console.log(`WebSocket connected for user ${currentUser.id}`);
+  //   };
+  //
+  //   ws.onmessage = (event) => {
+  //     console.log(`User ${currentUser.id} received:`, event.data);
+  //     const data = JSON.parse(event.data);
+  //
+  //     if (data.type === 'new_message') {
+  //       const message = data.message;
+  //       console.log('Processing message:', message);
+  //
+  //       const isForCurrentConversation =
+  //         (message.sender_id.toString() === userId && message.receiver_id === currentUser.id) ||
+  //         (message.receiver_id.toString() === userId && message.sender_id === currentUser.id);
+  //
+  //       if (isForCurrentConversation) {
+  //         queryClient.setQueryData(['conversation', userId], (oldData: IMessage[] = []) => {
+  //           const exists = oldData.some((msg) => msg.id === message.id);
+  //           if (exists) return oldData;
+  //
+  //           return [...oldData, message];
+  //         });
+  //       }
+  //     }
+  //   };
+  //
+  //   ws.onclose = () => {
+  //     console.log(`WebSocket closed for user ${currentUser.id}`);
+  //   };
+  //
+  //   return () => ws.close();
+  // }, [currentUser, userId, queryClient]);
+
   useEffect(() => {
     if (!currentUser) return;
-    const ws = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
 
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === 'new_message') {
-        queryClient.setQueryData(['conversation', userId], (oldData: IMessage[]) => [
-          ...oldData,
-          data.message,
-        ]);
-      }
+    let wsRef: WebSocket | null = null;
+    let isConnecting = false;
+
+    const connectWebSocket = () => {
+      if (isConnecting || wsRef?.readyState === WebSocket.CONNECTING) return;
+
+      isConnecting = true;
+      console.log(`Setting up WebSocket for user ${currentUser.id}`);
+
+      wsRef = new WebSocket(`wss://marketnest-gfmk.onrender.com/chat/ws/${currentUser.id}`);
+
+      wsRef.onopen = () => {
+        console.log(`WebSocket connected for user ${currentUser.id}`);
+        isConnecting = false;
+      };
+
+      wsRef.onmessage = (event) => {
+        console.log(`User ${currentUser.id} received:`, event.data);
+        try {
+          const data = JSON.parse(event.data);
+
+          if (data.type === 'new_message') {
+            const message = data.message;
+            console.log('Processing message:', message);
+
+            const isForCurrentConversation =
+              (message.sender_id.toString() === userId && message.receiver_id === currentUser.id) ||
+              (message.receiver_id.toString() === userId && message.sender_id === currentUser.id);
+
+            console.log('Is for current conversation:', isForCurrentConversation);
+
+            if (isForCurrentConversation) {
+              queryClient.setQueryData(['conversation', userId], (oldData: IMessage[] = []) => {
+                const exists = oldData.some((msg) => msg.id === message.id);
+                if (exists) {
+                  console.log('Message already exists, skipping');
+                  return oldData;
+                }
+
+                console.log('Adding new message to conversation');
+                return [...oldData, message];
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+        }
+      };
+
+      wsRef.onclose = (event) => {
+        console.log(`WebSocket closed for user ${currentUser.id}:`, event.code, event.reason);
+        isConnecting = false;
+      };
+
+      wsRef.onerror = (error) => {
+        console.error(`WebSocket error for user ${currentUser.id}:`, error);
+        isConnecting = false;
+      };
     };
 
-    return () => ws.close();
-  }, [currentUser, currentUser?.id, queryClient, userId]);
+    connectWebSocket();
+
+    return () => {
+      if (wsRef && wsRef.readyState === WebSocket.OPEN) {
+        console.log(`Closing WebSocket for user ${currentUser.id}`);
+        wsRef.close();
+      }
+      isConnecting = false;
+      wsRef = null;
+    };
+  }, [currentUser?.id, userId, queryClient]);
 
   const sendMessageMutation = useMutation({
     mutationFn: messagesApi.sendMessage,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['conversation', userId] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
   });

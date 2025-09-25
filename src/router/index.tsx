@@ -63,7 +63,7 @@ export const AppRouter = () => {
         }
       />
       <Route
-        path="/advertisement/:advertisementId/messages/:userId"
+        path="/messages/:userId"
         element={
           <ProtectedRoute>
             <Chat />
