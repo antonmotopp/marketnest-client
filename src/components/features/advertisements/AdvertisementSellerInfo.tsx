@@ -26,27 +26,8 @@ export const AdvertisementSellerInfo = ({
   onBuyNow,
 }: Props) => {
   const currentUser = useAuthStore((state) => state.user);
-  // const [sellerRatings, setSellerRatings] = useState<IRating[]>([]);
-  // const [averageRating, setAverageRating] = useState<number>(0);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [canRate, setCanRate] = useState(false);
-
-  // useEffect(() => {
-  //   const fetchSellerRatings = async () => {
-  //     try {
-  //       const ratings = await ratingsApi.getUserRatings(owner.id);
-  //       setSellerRatings(ratings);
-  //
-  //       if (ratings.length > 0) {
-  //         const avg = ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length;
-  //         setAverageRating(Math.round(avg * 10) / 10);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching seller ratings:', error);
-  //     }
-  //   };
-  //   fetchSellerRatings();
-  // }, [owner.id]);
 
   useEffect(() => {
     const checkCanRate = async () => {
@@ -99,7 +80,7 @@ export const AdvertisementSellerInfo = ({
                   Buy Now
                 </button>
                 <Link
-                  to={`/messages/${owner.id}`}
+                  to={`/advertisement/${advertisementId}/messages/${owner.id}`}
                   className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-center"
                 >
                   Contact Seller

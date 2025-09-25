@@ -8,11 +8,12 @@ import type { IMessage } from '@/types';
 import { useUser } from '@/hooks';
 
 type Params = {
+  advertisementId: string;
   userId: string;
 };
 
 export const Chat = () => {
-  const { userId } = useParams<Params>();
+  const { advertisementId, userId } = useParams<Params>();
   const navigate = useNavigate();
   const currentUser = useAuthStore((state) => state.user);
   const queryClient = useQueryClient();
@@ -58,6 +59,7 @@ export const Chat = () => {
 
     sendMessageMutation.mutate({
       receiver_id: Number(userId),
+      advertisement_id: Number(advertisementId),
       content,
     });
   };
