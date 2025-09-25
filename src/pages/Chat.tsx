@@ -146,6 +146,7 @@ export const Chat = () => {
   const sendMessageMutation = useMutation({
     mutationFn: messagesApi.sendMessage,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['conversation', userId] });
       queryClient.invalidateQueries({ queryKey: ['conversations'] });
     },
   });
